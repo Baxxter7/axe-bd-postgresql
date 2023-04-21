@@ -1,0 +1,44 @@
+--PROCEDIMIENTOS SEG_ROLES
+CREATE OR REPLACE FUNCTION SP_ROLES(
+    TIPO_OPERACION VARCHAR(2),
+	PI_COD_ROLES integer,
+    PV_TIP_ROLES varchar
+     
+	
+) RETURNS table(COD_ROL integer,
+    TIP_ROLES VARCHAR
+   
+	
+)
+AS $$
+  BEGIN
+  --Convertimos a mayuscula el tipo de operacion que realizara el SP;
+  TIPO_OPERACION = UPPER(TIPO_OPERACION);
+	CASE TIPO_OPERACION
+    WHEN 'ST' THEN --SELECCIONAR TODOS LOS REGISTROS
+			 RETURN QUERY select * from SEG_ROLES;
+           
+    WHEN 'S' THEN --SELECCIONAR UN REGISTRO ESPECIFICO
+			 RETURN QUERY select * from SEG_ROLES where SEG_ROLES.COD_ROL=PI_COD_ROLES;
+       
+       
+     WHEN 'I' THEN --INSERT
+			INSERT INTO SEG_ROLES(
+    TIP_ROLES
+    
+    )values(
+    PV_TIP_ROLES 
+   
+    );	
+			
+       
+     WHEN 'U' THEN --UPDATE
+			UPDATE SEG_ROLES SET   TIP_ROLES=PV_TIP_ROLES
+            WHERE SEG_ROLES.COD_ROL=PI_COD_ROLES;
+			
+        
+		
+    END CASE;
+
+  END;
+$$ LANGUAGE plpgsql;
